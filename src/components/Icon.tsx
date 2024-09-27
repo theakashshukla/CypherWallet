@@ -11,7 +11,7 @@ import {
 export const Icon = {
   sync: RefreshCcw,
   wallet: WalletIcon,
-  transction: ArrowLeftRight,
+  transaction: ArrowLeftRight,
   bitcoin: BitcoinIcon,
   plus: PlusIcon,
   delete: Trash2,

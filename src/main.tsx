@@ -6,6 +6,8 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import './index.css'
+import Wallet from './pages/Wallet.tsx';
+import Transactions from './pages/Transactions.tsx';
 
 const router = createBrowserRouter([
   {
@@ -14,23 +16,13 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: (
-          <div>
-            <h2>Welcome to the wallet</h2>
-            <p>This is the main content area.</p>
-          </div>
-        ),
-        // element: <Wallet />,
+        
+        element: <Wallet />,
       },
       {
         path: "/transactions",
-        element: (
-          <div>
-            <h2>Welcome to the trans</h2>
-            <p>This is the main content area.</p>
-          </div>
-        ),
-        // element: <Transactions />,
+        
+        element: <Transactions />,
       },
     ],
   },

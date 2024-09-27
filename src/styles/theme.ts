@@ -10,6 +10,7 @@ export const theme: DefaultTheme = {
     navbarBackground: "#1A1F26",
     sidebarBorder: "#ddd",
     border: "#A29278",
+    activeMenu: "#C0996F",
     activeText: '#E0B36A'
   },
   spacing: {
