@@ -1,12 +1,11 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-// Create a styled component for the title
 const StyledTitle = styled.h1`
-  font-size: 2.5rem; /* Default font size */
-  color: ${({ theme }) => theme.colors.activeText}; /* Use theme's primary text color */
-  text-align: left; /* Default alignment */
-  margin: 20px 0; /* Default margin */
+  font-size: 2rem;
+  color: ${({ theme }) => theme.colors.activeText};
+  text-align: left;
+  margin: 20px 0;
   font-weight: bold;
   line-height: 1.2;
 `;

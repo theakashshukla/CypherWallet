@@ -2,10 +2,10 @@ import { DefaultTheme } from "styled-components";
 
 export const theme: DefaultTheme = {
   colors: {
-    primary: "#3498db",
+    primary: "#8484F1",
     secondary: "#2ecc71",
     background: "#1A1F26",
-    text: "#333",
+    text: "#7E7D7D",
     sidebarBackground: "#242830",
     navbarBackground: "#1A1F26",
     sidebarBorder: "#ddd",

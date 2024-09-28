@@ -1,8 +1,12 @@
+import TransactionsTable from "../components/Transaction/TransactionTable";
+import Title from "../components/ui/Title";
+
 const Transactions = () => {
   return (
     <div>
-      <h2>Welcome to the Trans</h2>
-      <p>This is the main content area.</p>
+        <Title>Transaction</Title>
+        <TransactionsTable />
+     
     </div>
   );
 };
