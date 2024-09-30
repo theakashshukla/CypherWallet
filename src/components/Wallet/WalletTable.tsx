@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { RootState } from "../../state";
-import { addSyncItem } from "../../state/slices/syncQueueSlice";
+// import { addSyncItem } from "../../state/slices/syncQueueSlice";
 import ImportWalletModal from "./WalletModal";
 import Title from "../ui/Title";
 import { Icon } from "../Icon";
+import { removeWallet } from "../../state/slices/walletSlice";
 
 const IconContainer = styled.div`
   display: flex;
@@ -121,16 +122,20 @@ const WalletList: React.FC = () => {
   const dispatch = useDispatch();
   const totalCoins = wallets.reduce((total, wallet) => total + wallet.balance, 0);
 
-  const handleRefresh = () => {
-    wallets.forEach((wallet) => {
-      dispatch(
-        addSyncItem({ walletId: wallet.id, type: "balance", status: "pending" })
-      );
-      dispatch(
-        addSyncItem({ walletId: wallet.id, type: "history", status: "pending" })
-      );
-    });
+  const handleDelete = (walletAddress: string) => {
+    dispatch(removeWallet(walletAddress));
   };
+
+  // const handleRefresh = () => {
+  //   wallets.forEach((wallet) => {
+  //     dispatch(
+  //       addSyncItem({ walletId: wallet.id, type: "balance", status: "pending" })
+  //     );
+  //     dispatch(
+  //       addSyncItem({ walletId: wallet.id, type: "history", status: "pending" })
+  //     );
+  //   });
+  // };
 
   return (
     <TableContainer>
@@ -168,7 +173,7 @@ const WalletList: React.FC = () => {
 
               <TableCell>BTC {wallet.balance}</TableCell>
               <TableCell>
-                <IconContainer>
+                <IconContainer onClick={() => handleDelete(wallet.address)}>
                   <Icon.delete size={18} />
                 </IconContainer>
               </TableCell>
@@ -179,7 +184,7 @@ const WalletList: React.FC = () => {
       {showImportPopup && (
         <ImportWalletModal onClose={() => setShowImportPopup(false)} />
       )}
-      <StyledButton onClick={handleRefresh}>Refresh All</StyledButton>
+      {/* <StyledButton onClick={handleRefresh}>Refresh All</StyledButton> */}
     </TableContainer>
   );
 };

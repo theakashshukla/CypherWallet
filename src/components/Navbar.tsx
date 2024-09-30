@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Icon } from "./Icon";
 import SyncQueue from "./SyncQueue";
 
 const NavbarContainer = styled.nav`
@@ -48,7 +47,6 @@ const Navbar = () => {
       <Logo src="/cysunc.png" />
       <NavItems>
         <NavItem>
-          <Icon.sync size={18} /> <span>Synced</span>
           <SyncQueue />
         </NavItem>
       </NavItems>

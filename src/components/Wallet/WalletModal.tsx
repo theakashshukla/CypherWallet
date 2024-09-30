@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { useDispatch } from "react-redux";
-import { addWallet } from "../../state/slices/walletSlice";
-import { deriveAddressFromMnemonic } from "../../utils/deriveAddressFromMnemonic";
-import { Icon } from "../Icon";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { addWallet } from '../../state/slices/walletSlice';
+import { deriveAddressFromMnemonic } from '../../utils/deriveAddressFromMnemonic';
+import { Icon } from '../Icon';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -61,9 +61,11 @@ const SubmitButton = styled.button`
   cursor: pointer;
   width: 100%;
   &:hover {
-    background-color: #ff8c00;
+  
+    background-color: #ff8c00; 
     border-color: #ff8c00;
     border: none;
+    
   }
 `;
 
@@ -76,13 +78,13 @@ const CloseIcon = styled.div`
   font-size: 24px;
 
   &:hover {
-    color: ${({ theme }) => theme.colors.text}; /* Change color on hover */
+    color:${({ theme }) => theme.colors.text}; /* Change color on hover */
   }
 `;
 
 const ImportWalletModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-  const [mnemonic, setMnemonic] = useState("");
-  const [walletName, setWalletName] = useState("");
+  const [mnemonic, setMnemonic] = useState('');
+  const [walletName, setWalletName] = useState('');
   const dispatch = useDispatch();
 
   const handleImport = () => {
@@ -92,16 +94,16 @@ const ImportWalletModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       dispatch(
         addWallet({
           id: address,
-          name: walletName,
+          name: walletName, 
           address,
-          balance: 0,
+          balance: 0, 
         })
       );
 
-      setMnemonic("");
-      setWalletName("");
-      onClose();
-    }
+      setMnemonic(''); 
+      setWalletName('');
+      onClose(); 
+    } 
   };
 
   return (
@@ -112,7 +114,7 @@ const ImportWalletModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         </CloseIcon>
         <ModalTitle>Import Wallet</ModalTitle>
         <span>Enter your wallet name:</span>
-        <InputField
+         <InputField
           type="text"
           value={walletName}
           onChange={(e) => setWalletName(e.target.value)}
@@ -123,13 +125,11 @@ const ImportWalletModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
           value={mnemonic}
           onChange={(e) => setMnemonic(e.target.value)}
         />
-
-        <SubmitButton
-          onClick={handleImport}
-          disabled={!mnemonic || !walletName}
-        >
+       
+        <SubmitButton onClick={handleImport} disabled={!mnemonic || !walletName}>
           Import Wallet
         </SubmitButton>
+       
       </ModalContainer>
     </ModalOverlay>
   );
