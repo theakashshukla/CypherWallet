@@ -15,9 +15,12 @@ const IconContainer = styled.div`
   margin-right: 8px;
   height: 30px;
   width: 30px;
-    background-color: ${({ theme }) => theme.colors.background};
-
+  background-color: ${({ theme }) => theme.colors.background};
   color: ${({ theme }) => theme.colors.activeText};
+  &:hover {
+    background-color: #242730;
+    border: 1px solid ${({ theme }) => theme.colors.border};
+  }
 `;
 const BitContainer = styled.div`
   display: flex;
@@ -93,17 +96,30 @@ const StyledButton = styled.button`
   transition: background-color 0.3s ease;
   height: 48px;
   border: 1px solid ${({ theme }) => theme.colors.border};
- &:hover {
+  &:hover {
     background-color: #242730;
     border: 1px solid ${({ theme }) => theme.colors.border};
   }
- 
+`;
+
+const TotalTransactionsText = styled.p`
+  text-align: left;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 10px 0;
+  margin-left: 15px;
+  color: ${({ theme }) => theme.colors.text || "#000"};
+`;
+const Border = styled.div`
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  margin: 0 15px;
 `;
 
 const WalletList: React.FC = () => {
   const [showImportPopup, setShowImportPopup] = useState(false);
   const wallets = useSelector((state: RootState) => state.wallet.wallets);
   const dispatch = useDispatch();
+  const totalCoins = wallets.reduce((total, wallet) => total + wallet.balance, 0);
 
   const handleRefresh = () => {
     wallets.forEach((wallet) => {
@@ -118,10 +134,11 @@ const WalletList: React.FC = () => {
 
   return (
     <TableContainer>
+      <TotalTransactionsText>Total Coins: {totalCoins.toFixed(8)}</TotalTransactionsText>
+      <Border />
       <Container>
         <Title>Wallets</Title>
         <StyledButton onClick={() => setShowImportPopup(true)}>
-          
           <IconContainer>
             <Icon.plus size={18} />{" "}
           </IconContainer>{" "}
@@ -132,24 +149,29 @@ const WalletList: React.FC = () => {
         <TableHead>
           <TableRow>
             <TableHeader>Coin</TableHeader>
-            <TableHeader>Wallet</TableHeader>
-            <TableHeader>Amount</TableHeader>
+            <TableHeader>Holding</TableHeader>
+            <TableHeader>Action</TableHeader>
           </TableRow>
         </TableHead>
         <TableBody>
           {wallets.map((wallet) => (
             <TableRow key={wallet.address}>
-             
               <TableCell>
-              <BitContainer>
-                <CoinIcon
-                  src={`https://s2.coinmarketcap.com/static/img/coins/64x64/1.png`} // Replace with dynamic URL if needed
-                  alt={wallet.name}
-                />
-                <Text>{wallet.name}</Text></BitContainer>
+                <BitContainer>
+                  <CoinIcon
+                    src={`https://s2.coinmarketcap.com/static/img/coins/64x64/1.png`} // Replace with dynamic URL if needed
+                    alt={wallet.name}
+                  />
+                  <Text>{wallet.name}</Text>
+                </BitContainer>
               </TableCell>
-              <TableCell>{wallet.address}</TableCell>
-              <TableCell>{wallet.balance}</TableCell>
+
+              <TableCell>BTC {wallet.balance}</TableCell>
+              <TableCell>
+                <IconContainer>
+                  <Icon.delete size={18} />
+                </IconContainer>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

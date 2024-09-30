@@ -84,18 +84,31 @@ const StatusBadge = styled.span<StatusBadgeProps>`
       : "#777"};
   font-weight: 600;
 `;
+const TotalTransactionsText = styled.p`
+  text-align: left;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 10px 0;
+  margin-left: 15px;
+  color: ${({ theme }) => theme.colors.text || "#000"};
+`;
+const Border = styled.div`
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  margin: 0 15px;
+`;
 
 const TransactionsTable: React.FC = () => {
   const dispatch = useDispatch();
   const transactions = useSelector(
     (state: RootState) => state.transactions.transactions
   );
+
   const wallets = useSelector((state: RootState) => state.wallet.wallets); // Get wallets from the Redux store
+  console.log(wallets);
 
   useEffect(() => {
     const fetchedTransactions = async () => {
       try {
-        // Create an array to hold all transaction promises
         const allTransactionPromises = wallets.map(async (wallet) => {
           const fetchedTransactions = await getTransactions(wallet.address);
           return fetchedTransactions.map((tx: any) => ({
@@ -110,12 +123,9 @@ const TransactionsTable: React.FC = () => {
           }));
         });
 
-        // Wait for all transaction promises to resolve
         const allTransactions = await Promise.all(allTransactionPromises);
-        // Flatten the array
         const formattedTransactions = allTransactions.flat();
-        
-        // Dispatch the formatted transactions to the store
+
         dispatch(setTransactions(formattedTransactions));
       } catch (error) {
         console.error("Error fetching transactions:", error);
@@ -129,6 +139,10 @@ const TransactionsTable: React.FC = () => {
 
   return (
     <TableContainer>
+      <TotalTransactionsText>
+        Total Transactions: {transactions.length}
+      </TotalTransactionsText>
+      <Border />
       <Table>
         <TableHead>
           <TableRow>
