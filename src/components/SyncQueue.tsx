@@ -52,11 +52,13 @@ const SyncQueue: React.FC = () => {
   );
 
   const fetchBalance = async (walletAddress: string) => {
-    
+   console.log(walletAddress)
     return new Promise((resolve) => setTimeout(resolve, 1000));
   };
 
+  
   const fetchHistory = async (walletAddress: string) => {
+    console.log(walletAddress)
     return new Promise((resolve) => setTimeout(resolve, 1000));
   };
 
