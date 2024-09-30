@@ -58,7 +58,7 @@ const Sidebar = () => {
       name: "Transactions",
       path: "/transactions",
       icon: <Icon.transaction size={18} />,
-    }, // Replace <Icon.transaction /> with your actual icon component
+    },
   ];
   return (
     <SidebarContainer>

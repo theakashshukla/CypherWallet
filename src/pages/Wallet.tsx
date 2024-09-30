@@ -1,10 +1,9 @@
-import Title from "../components/ui/Title";
+import WalletList from "../components/Wallet/WalletTable";
 
 const Wallet = () => {
   return (
     <div>
-      {/* <Title text='Hello'></Title> */}
-      <Title>Hello</Title>
+      <WalletList />
     </div>
   );
 };

@@ -1,5 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+
+import { StatusBadgeProps } from "../../types/transaction";
+import { useDispatch, useSelector } from "react-redux";
+import { setTransactions } from "../../state/slices/transactionSlice";
+import { getTransactions } from "../../api/getTransactions";
+import { RootState } from "../../state";
+
+const IconContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const CoinIcon = styled.img`
+  width: 24px;
+  margin-right: 8px;
+`;
+
+const DateTimeContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
+const DateText = styled.span`
+  font-weight: 600;
+`;
+
+const TimeText = styled.small`
+  opacity: 0.7;
+`;
 
 const TableContainer = styled.div`
   width: 75vw;
@@ -42,12 +72,6 @@ const TableCell = styled.td`
   color: ${({ theme }) => theme.colors.cellText || "#ffffff"};
 `;
 
-// Define the type for the status prop
-interface StatusBadgeProps {
-  status: "SUCCESS" | "FAILED" | "PENDING" | "CANCELED" | string; // Expanded to allow additional status values
-}
-
-// StatusBadge styled component accepting different status types
 const StatusBadge = styled.span<StatusBadgeProps>`
   padding: 6px 12px;
   border-radius: 12px;
@@ -61,39 +85,48 @@ const StatusBadge = styled.span<StatusBadgeProps>`
   font-weight: 600;
 `;
 
-// Sample Data (You can replace it with your API data)
-const transactions = [
-  {
-    coin: "Bitcoin",
-    date: "12/11/2020",
-    time: "10:31:20 AM",
-    wallet: "Aru",
-    amount: "0.5268 BTC",
-    result: "RECEIVED",
-    status: "SUCCESS",
-  },
-  {
-    coin: "Bitcoin",
-    date: "12/11/2020",
-    time: "10:31:20 AM",
-    wallet: "Aru",
-    amount: "0.5268 BTC",
-    result: "RECEIVED",
-    status: "SUCCESS",
-  },
-  {
-    coin: "Bitcoin",
-    date: "12/11/2020",
-    time: "10:31:20 AM",
-    wallet: "Aru",
-    amount: "0.5268 BTC",
-    result: "RECEIVED",
-    status: "SUCCESS",
-  },
-  // Repeat for other transactions as needed
-];
-
 const TransactionsTable: React.FC = () => {
+  const dispatch = useDispatch();
+  const transactions = useSelector(
+    (state: RootState) => state.transactions.transactions
+  );
+  const wallets = useSelector((state: RootState) => state.wallet.wallets); // Get wallets from the Redux store
+
+  useEffect(() => {
+    const fetchedTransactions = async () => {
+      try {
+        // Create an array to hold all transaction promises
+        const allTransactionPromises = wallets.map(async (wallet) => {
+          const fetchedTransactions = await getTransactions(wallet.address);
+          return fetchedTransactions.map((tx: any) => ({
+            coin: "Bitcoin",
+            date: new Date(tx.confirmed).toLocaleDateString(),
+            time: new Date(tx.confirmed).toLocaleTimeString(),
+            wallet: wallet.address,
+            amount: `${(tx.value / 100000000).toFixed(8)} BTC`, // Convert satoshis to BTC
+            result: tx.value > 0 ? "RECEIVED" : "SENT",
+            status: tx.confirmations > 0 ? "SUCCESS" : "PENDING",
+            hash: tx.hash,
+          }));
+        });
+
+        // Wait for all transaction promises to resolve
+        const allTransactions = await Promise.all(allTransactionPromises);
+        // Flatten the array
+        const formattedTransactions = allTransactions.flat();
+        
+        // Dispatch the formatted transactions to the store
+        dispatch(setTransactions(formattedTransactions));
+      } catch (error) {
+        console.error("Error fetching transactions:", error);
+      }
+    };
+
+    if (wallets.length > 0) {
+      fetchedTransactions();
+    }
+  }, [dispatch, wallets]);
+
   return (
     <TableContainer>
       <Table>
@@ -110,26 +143,21 @@ const TransactionsTable: React.FC = () => {
           {transactions.map((transaction, index) => (
             <TableRow key={index}>
               <TableCell>
-                <img
-                  src={`https://s2.coinmarketcap.com/static/img/coins/64x64/1.png`}
-                  alt={transaction.coin}
-                  style={{
-                    width: "24px",
-                    marginRight: "8px",
-                    verticalAlign: "middle",
-                  }}
-                />
-                <span>
-                  {transaction.date}
-                  <br />
-                  <small>{transaction.time}</small>
-                </span>
+                <IconContainer>
+                  <CoinIcon
+                    src={`https://s2.coinmarketcap.com/static/img/coins/64x64/1.png`}
+                    alt={transaction.coin}
+                  />
+                  <DateTimeContainer>
+                    <DateText>{transaction.date}</DateText>
+                    <TimeText>{transaction.time}</TimeText>
+                  </DateTimeContainer>
+                </IconContainer>
               </TableCell>
               <TableCell>{transaction.wallet}</TableCell>
               <TableCell>{transaction.amount}</TableCell>
               <TableCell>{transaction.result}</TableCell>
               <TableCell>
-                {/* Pass the status prop to StatusBadge */}
                 <StatusBadge status={transaction.status}>
                   {transaction.status}
                 </StatusBadge>

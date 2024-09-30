@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Icon } from "./Icon";
+import SyncQueue from "./SyncQueue";
 
 const NavbarContainer = styled.nav`
   width: 100vw;
@@ -10,18 +11,17 @@ const NavbarContainer = styled.nav`
   align-items: center;
   justify-content: space-between;
   padding: 0 ${({ theme }) => theme.spacing.medium};
-  box-sizing: border-box; 
+  box-sizing: border-box;
   color: #fff;
-  overflow: hidden; 
+  overflow: hidden;
 `;
 
 const Logo = styled.img`
   margin-left: 30px;
   width: 100px;
-  height: auto; 
-  object-fit: contain; 
+  height: auto;
+  object-fit: contain;
 `;
-
 
 const NavItems = styled.ul`
   list-style: none;
@@ -34,9 +34,9 @@ const NavItems = styled.ul`
 
 const NavItem = styled.li`
   cursor: pointer;
-  display: flex; 
-  align-items: center; 
-  gap: 8px; 
+  display: flex;
+  align-items: center;
+  gap: 8px;
   &:hover {
     opacity: 0.8;
   }
@@ -49,6 +49,7 @@ const Navbar = () => {
       <NavItems>
         <NavItem>
           <Icon.sync size={18} /> <span>Synced</span>
+          <SyncQueue />
         </NavItem>
       </NavItems>
     </NavbarContainer>
